@@ -3,21 +3,25 @@ public class Hamilton {
 
 	Graph graph;
 
-	public Hamilton(int v, boolean d) {
-		graph = new Graph(v, d);
+	public Hamilton(Graph g) {
+		graph=g;
 	}
 
-	Graph hamiltonPath() {
+	Graph hamiltonPath()//mona
+	{
 
 		return null;
 	}
 
-	Graph haminltonCircuit() {
+	Graph haminltonCircuit()//mayada 
+	{
 
 		return null;
 	}
 
-	Graph minmumHamiltonCircuit() {
+	Graph minmumHamiltonCircuit()//mina 
+	{
+		
 		return null;
 	}
 }
