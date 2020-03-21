@@ -12,11 +12,50 @@ public class Hamilton {
 		graph = g;
 	}
 
-	Graph hamiltonPath()// mona
-	{
+	Boolean check(int v , int adj[][] , int vaildPath[] , int count , int vertices , Graph temp) {
+        if (count == vertices) {
+            return true;
+        }
+        for (int i = 0; i < vertices; i++) {
+            if (adj[v][i] > 0 && vaildPath[i] == 0) {
+                vaildPath[i] = 1;
+                temp.addEdge(v , i , adj[v][i]);
+                if (check(i , adj , vaildPath , count + 1 , vertices , temp)) {
+                    return true;
+                }
+                vaildPath[i] = 1;
+            }
+        }
+        return false;
+    }
 
-		return null;
-	}
+    boolean isValid(int adj[][] , int vertices , Graph g) {
+        int path[] = new int[vertices];
+        for (int i = 0; i < vertices; i++) {
+            path[i] = 0;
+        }
+        for (int i = 0; i < vertices; i++) {
+            path[i] = 1;
+            if (check(i , adj , path , 1 , vertices , g)) {
+                return true;
+            }
+            path[i] = 0;
+        }
+        return false;
+    }
+
+    Graph hamiltonPath()// mona
+    {
+        Graph finalGraph = new Graph(graph.vertices , true);
+        boolean flag = isValid(graph.representation , graph.vertices , finalGraph);
+
+        if (flag == true) {
+            return finalGraph;
+        }
+        else {
+            return null;
+        }
+    }
 
 	Graph haminltonCircuit()// mayada
 	{
