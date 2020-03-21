@@ -11,6 +11,15 @@ public class Main {
 		g.addEdge(1, 3, 1);
 		Hamilton h=new Hamilton(g);
 		//g.displayeadgs();
+		Graph path = h.hamiltonPath();
+        	if (path == null) {
+            		System.out.println("There is no Hamilton Path!!");
+        	}
+        	else {
+            		System.out.println("\nHamilton Path : ");
+            		path.displayeadgs();
+        	}
+        	System.out.println("\nMinimum Hmailton Circuit : ");
 		Graph minpath=h.minmumHamiltonCircuit(0);
 		minpath.displayRepresentation();
 		minpath.displayeadgs();
