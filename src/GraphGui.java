@@ -39,7 +39,7 @@ public class GraphGui {
     boolean digraph = false;
     boolean min = false;
     boolean path = false;
-
+    boolean cycle = false;
     /**
      * Launch the application.
      */
@@ -98,7 +98,7 @@ public class GraphGui {
                 for (int i = 0; i < adjacencyList.length; i++) {
                     if (adjacencyList[i].size() > 0) {
                         euler.addVertex(i);
-                        euler.degree(i);
+                       // euler.degree(i);
                         for (int j = 0; j < adjacencyList[i].size(); j++) {
                             euler.addEdge(Integer.toString(c++), i, adjacencyList[i].get(j));
                         }
@@ -121,7 +121,7 @@ public class GraphGui {
 
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(650, 690, 600, 710);
+        frame.setBounds(650, 690, 600, 780);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -145,20 +145,28 @@ public class GraphGui {
         JCheckBox HamiltonPathCheckBox = new JCheckBox("Hamilton Path");
         HamiltonPathCheckBox.setBounds(426, 60, 123, 63);
         frame.getContentPane().add(HamiltonPathCheckBox);
+        
+        JCheckBox HamiltonCycleCheckBox = new JCheckBox("Hamilton Cycle");
+        HamiltonCycleCheckBox.setBounds(426, 93, 130, 73);
+        frame.getContentPane().add(HamiltonCycleCheckBox);
 
         JButton btnGetMatrises = new JButton("get Hamilton");
         btnGetMatrises.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 numofvertices = Integer.parseInt(numofverticestext.getText());
                 Integer[][] representation = new Integer[numofvertices][numofvertices];
+                Integer[][] pathRepresentation = new Integer[numofvertices][numofvertices];
+                Integer[][] cycleRepresentation = new Integer[numofvertices][numofvertices];
+                Integer[][] minRepresentation = new Integer[numofvertices][numofvertices];
                 List<Integer> adjacencyList[];
-                Integer[][]adj = new Integer[numofvertices][numofvertices];
                 List<Edge> edges = new ArrayList<Edge>();
-                List<Edge> edgesTmp = new ArrayList<Edge>();
                 adjacencyList = new List[numofvertices];
                 for (int i = 0; i < numofvertices; i++) {
                     for (int j = 0; j < numofvertices; j++) {
                         representation[i][j] = 0;
+                        pathRepresentation[i][j]= 0;
+                        cycleRepresentation[i][j]=0;
+                        minRepresentation[i][j] = 0;
                     }
                 }
                 for (int i = 0; i < numofvertices; i++) {
@@ -201,6 +209,7 @@ public class GraphGui {
                         digraph = digraphCheckBox.isSelected();
                         min = minTreeCheckBox.isSelected();
                         path = HamiltonPathCheckBox.isSelected();
+                        cycle = HamiltonCycleCheckBox.isSelected();
                         if (digraph) {
                             counter++;
                             d = false;
@@ -241,12 +250,12 @@ public class GraphGui {
                     Graph minpath = h.minmumHamiltonCircuit(0);
                     for (int i = 0; i < minpath.representation.length; i++) {
                         for (int j = 0; j < minpath.representation.length; j++) {
-                            representation[i][j] = minpath.representation[i][j];
-                            System.out.print(representation[i][j]);
+                            minRepresentation[i][j] = minpath.representation[i][j];
+                            //System.out.print(minRepresentation[i][j]);
                         }
-                        System.out.println();
+                        //System.out.println();
                     }
-                    drawRepresentation(representation, "Hamilton Minimum Tree");
+                    drawRepresentation(minRepresentation, "Hamilton Minimum Tree");
 
                 }
                 }
@@ -265,25 +274,47 @@ public class GraphGui {
                     if(path != null){
                     for (int i = 0; i < path.representation.length; i++) {
                         for (int j = 0; j < path.representation.length; j++) {
-                            representation[i][j] = path.representation[i][j];
+                            pathRepresentation[i][j] = path.representation[i][j];
                         }
                        
                     }
-                    drawRepresentation(representation, "Hamilton Path");
+                    drawRepresentation(pathRepresentation, "Hamilton Path");
                     }
                     else
                     {
                         showMessageDialog(null, "Doesn't have Hamilton Path ..");
                     }
                 }
+                if(cycle)
+                {
+                    for (int i = 0; i < representation.length; i++) {
+                        for (int j = 0; j < representation.length; j++) {
+                            g.representation[i][j] = representation[i][j];
+                        }
+                    }
+                    Graph circuit = h.haminltonCircuit();
+                    if(circuit != null){
+                    for (int i = 0; i < circuit.representation.length; i++) {
+                        for (int j = 0; j < circuit.representation.length; j++) {
+                            cycleRepresentation[i][j] = circuit.representation[i][j];
+                        }
+                       
+                    }
+                    drawRepresentation(cycleRepresentation, "Hamilton Circuit");
+                    }
+                    else
+                    {
+                        showMessageDialog(null, "Doesn't have Hamilton Circuit ..");
+                    }
+                }
                
             }
         });
-        btnGetMatrises.setBounds(150, 630, 127, 20);
+        btnGetMatrises.setBounds(150, 670, 127, 20);
         frame.getContentPane().add(btnGetMatrises);
 
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(23, 125, 500, 500);
+        scrollPane.setBounds(23, 167, 500, 500);
         frame.getContentPane().add(scrollPane);
 
         iotext = new JTextArea();
