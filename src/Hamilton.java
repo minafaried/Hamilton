@@ -57,11 +57,66 @@ public class Hamilton {
         }
     }
 
-	Graph haminltonCircuit()// mayada
-	{
+	boolean isSafe(int v , int graph[][] , int path[] , int pos) {
+        if (graph[path[pos - 1]][v] == 0) {
+            return false;
+        }
+        for (int i = 0; i < pos; i++) {
+            if (path[i] == v) {
+                return false;
+            }
+        }
 
-		return null;
-	}
+        return true;
+    }
+
+    boolean hamCycleUtil(int graph[][] , int path[] , int pos , int n) {
+        if (pos == n) {
+            if (graph[path[pos - 1]][path[0]] == 1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        for (int v = 1; v < n; v++) {
+            if (isSafe(v , graph , path , pos)) {
+                path[pos] = v;
+                if (hamCycleUtil(graph , path , pos + 1 , n) == true) {
+                    return true;
+                }
+                path[pos] = -1;
+            }
+        }
+        return false;
+    }
+    
+    void fillGraph(int path[] , Graph temp) {
+        int[][] adj = graph.representation;
+        for (int i = 0; i < path.length - 1; i++) {
+            temp.addEdge(path[i] , path[i + 1] , adj[i][i + 1]);
+        }
+        temp.addEdge(path[path.length - 1] , path[0] , adj[path.length - 1][0]);
+    }
+
+    Graph hamiltonCircuit() // mayada
+    {
+        Graph finaGraph = new Graph(graph.vertices , true);
+        int[] path = new int[graph.vertices];
+
+        for (int i = 0; i < graph.vertices; i++) {
+            path[i] = -1;
+        }
+        path[0] = 0;
+
+        if (hamCycleUtil(graph.representation , path , 1 , graph.vertices) == false) {
+            return null;
+        }
+
+        fillGraph(path , finaGraph);
+        return finaGraph;
+    }
+
 
 	boolean isedge(int currentNode, List<Edge> copyEdge) {
 		for (int i = 0; i < copyEdge.size(); i++) {
