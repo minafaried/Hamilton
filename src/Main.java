@@ -11,6 +11,14 @@ public class Main {
 		g.addEdge(1, 3, 1);
 		Hamilton h=new Hamilton(g);
 		//g.displayeadgs();
+		Graph circuit = h.hamiltonCircuit();
+                if (circuit == null) {
+            		System.out.println("There is no Hamilton Circuit!!");
+       		}
+       		else {
+            		System.out.println("\nHamilton Circuit : ");
+            		circuit.displayeadgs();
+       		}
 		Graph path = h.hamiltonPath();
         	if (path == null) {
             		System.out.println("There is no Hamilton Path!!");
