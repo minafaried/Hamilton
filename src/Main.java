@@ -2,6 +2,8 @@
 public class Main {
 
 	public static void main(String[] args) {
+		/*GraphGui lol = new GraphGui();
+                lol.test();*/
 		Graph g= new Graph(4,false);
 		g.addEdge(0, 1, 1);
 		g.addEdge(1, 2, 10);
